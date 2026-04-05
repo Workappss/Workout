@@ -285,3 +285,219 @@ h2 { margin: 0; font-size: 20px; }
     font-weight: bold;
     border: none;
 }
+/* Dodaj to na samym dole pliku style.css */
+.secondary-btn {
+    background-color: #2c2c2e; /* Ciemne tło pasujące do kart */
+    color: #34c759;           /* Zielony kolor tekstu */
+    border: 1px solid #34c759; /* Zielona ramka */
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;             /* Przycisk na całą szerokość */
+    margin-top: 20px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.secondary-btn:hover {
+    background-color: #34c759;
+    color: #1c1c1e;
+}
+#active-workout-screen {
+    padding-bottom: 100px !important; /* Rezerwuje 100px miejsca nad paskiem */
+    overflow-y: auto;                 /* Pozwala na przewijanie */
+    height: 100vh;                    /* Zajmuje całą wysokość */
+    box-sizing: border-box;
+}
+
+/* Jeśli masz osobny kontener na same ćwiczenia wewnątrz tego ekranu */
+#workout-exercises {
+    margin-bottom: 80px;
+}
+#workout-mini-bar {
+    position: fixed;
+    bottom: 85px; /* Tuż nad dolnym menu */
+    left: 15px;
+    right: 15px;
+    background: #1c1c1e;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 12px 15px;
+    z-index: 999;
+}
+
+.mini-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mini-bar-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #34c759;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #34c759;
+}
+
+.mini-text {
+    display: flex;
+    flex-direction: column;
+}
+
+#mini-workout-name {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#mini-timer {
+    color: #8e8e93;
+    font-size: 12px;
+}
+
+.mini-delete-btn {
+    background: none;
+    border: none;
+    color: #ff453a;
+    cursor: pointer;
+}
+#active-workout-screen .modal-nav {
+    display: flex;
+    justify-content: space-between; /* To rozsunie strzałkę do lewej, a przycisk do prawej */
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #000; /* Dopasuj do tła aplikacji */
+}
+
+/* Styl dla samej strzałki */
+#close-active-btn {
+    cursor: pointer;
+    font-size: 32px;
+    color: white;
+}
+
+/* Styl dla przycisku Finish Workout, żeby nie był za szeroki */
+#active-workout-screen .modal-nav button {
+    width: auto !important; /* Nadpisujemy szerokość 100% */
+    padding: 10px 25px;
+    margin: 0;
+    font-size: 16px;
+    border-radius: 12px;
+}
+/* Układ paska nawigacji */
+.modal-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Styl przycisku Finish */
+.finish-workout-btn {
+    width: auto !important; /* To sprawi, że nie będzie na całą szerokość */
+    background-color: #34c759;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Strzałka */
+#close-active-btn {
+    font-size: 30px;
+    color: white;
+}
+.action-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Przyciemnienie tła */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Menu wyjeżdża od dołu */
+    z-index: 9999; /* Musi być większy niż cokolwiek innego! */
+}
+
+.action-sheet {
+    background: #1c1c1e;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* To naprawi problem "napisów pod spodem" */
+.screen {
+    z-index: 1;
+}
+/* Kontener tła - przykrywa cały ekran */
+.action-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Półprzezroczyste czarne tło */
+    z-index: 9999 !important; /* Najwyższa warstwa - przykryje nawigację */
+    display: none; /* Ukryte domyślnie, JS zmieni na flex */
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* Sam panel z opcjami */
+.action-sheet {
+    background: #1c1c1e; /* Ciemny szary, jak w iOS */
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 10px 20px 30px 20px; /* Większy padding na dole */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Opcje w menu */
+.action-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    color: white;
+    font-size: 18px;
+    border-bottom: 1px solid #2c2c2e;
+    cursor: pointer;
+}
+
+/* Przycisk Cancel */
+.cancel-btn {
+    margin-top: 10px;
+    background: #2c2c2e;
+    color: #0a84ff; /* Niebieski kolor dla akcji */
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.action-item.delete {
+    color: #ff453a; /* Czerwony dla usuwania */
+}
+
