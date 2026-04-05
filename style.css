@@ -1,0 +1,287 @@
+body {
+    background-color: #000;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+header { padding: 40px 16px 10px 16px; }
+.header-main { display: flex; justify-content: space-between; align-items: center; }
+h1 { font-size: 32px; margin: 0; display: flex; align-items: center; gap: 8px; }
+
+/* Karta New Routine */
+.new-routine-container { padding: 10px 16px; }
+.new-routine-btn {
+    background-color: #1c1c1e;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+.btn-text { font-size: 18px; font-weight: 500; }
+
+/* Karty Treningów na liście */
+.card {
+    background-color: #1c1c1e;
+    margin: 16px;
+    padding: 20px;
+    border-radius: 14px;
+}
+.card-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+h2 { margin: 0; font-size: 20px; }
+.exercise-preview-list { color: #8e8e93; font-size: 15px; margin-bottom: 20px; line-height: 1.5; }
+.start-btn {
+    background-color: #007aff; color: white; border: none;
+    width: 100%; padding: 12px; border-radius: 10px; font-size: 16px; font-weight: 600;
+}
+
+/* Modal Tworzenia */
+.full-screen-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #000; z-index: 100; display: none; flex-direction: column;
+}
+.modal-nav { display: flex; justify-content: space-between; padding: 15px 16px; border-bottom: 0.5px solid #333; }
+.nav-btn { background: none; border: none; font-size: 17px; }
+.blue-text { color: #007aff; }
+.save-btn { color: #8e8e93; font-weight: 600; }
+.save-btn.active { color: #fff; }
+
+.modal-body { padding: 20px 16px; }
+.routine-title-input {
+    background: none; border: none; border-bottom: 1px solid #333;
+    color: white; width: 100%; font-size: 24px; padding: 10px 0; outline: none; margin-bottom: 30px;
+}
+
+.exercise-input-item {
+    background: #1c1c1e; padding: 12px; border-radius: 8px; margin-bottom: 10px;
+}
+.exercise-input-item input {
+    background: none; border: none; color: white; width: 100%; font-size: 16px; outline: none;
+}
+
+.empty-state { text-align: center; color: #8e8e93; margin: 40px 0; }
+.large-icon { font-size: 60px !important; margin-bottom: 10px; }
+
+.add-exercise-btn {
+    background-color: #007aff; color: white; border: none;
+    width: 100%; padding: 14px; border-radius: 10px; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+/* Tab Bar */
+.tab-bar {
+    position: fixed;   /* To przykleja pasek do ekranu */
+    bottom: 0;         /* Dokładnie na dole */
+    left: 0;           /* Od lewej krawędzi */
+    width: 100%;       /* Na całą szerokość */
+    height: 70px;      /* Stała wysokość paska */
+    background-color: #121212; /* Ciemne tło */
+    display: flex;     /* Układa ikony obok siebie */
+    justify-content: space-around; /* Rozkłada je równo */
+    align-items: center; /* Centruje ikony góra-dół */
+    border-top: 1px solid #333; /* Delikatna kreska nad paskiem */
+    z-index: 1000;     /* Żeby zawsze był nad innymi elementami */
+}
+
+.tab-item {
+    display: flex;
+    flex-direction: column; /* Ikona nad napisem */
+    align-items: center;
+    color: #8e8e93; /* Kolor nieaktywny */
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.tab-item.active {
+    color: #007aff; /* Niebieski kolor iOS */
+}
+
+.tab-item.active .material-symbols-outlined {
+    color: #007aff;
+}
+
+.tab-item span {
+    margin-bottom: 4px;
+}
+
+.action-sheet-container {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.action-sheet-group {
+    background: #1c1c1e;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.action-btn {
+    width: 100%;
+    padding: 18px;
+    background: none;
+    border: none;
+    border-bottom: 0.5px solid #333;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.action-btn:last-child { border-bottom: none; }
+.delete-text { color: #ff453a; }
+.cancel-btn { justify-content: center; font-weight: 600; color: #007aff; }
+
+.active-workout-body { padding: 10px 16px; overflow-y: auto; flex: 1; }
+.finish-btn { background-color: #007aff; color: white; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+.stats-bar {
+    display: flex; justify-content: space-around; padding: 15px 0;
+    border-bottom: 0.5px solid #333; margin-bottom: 10px;
+}
+.stat-item { text-align: center; }
+.stat-item span { color: #8e8e93; font-size: 12px; display: block; }
+.stat-item div { font-size: 18px; color: #007aff; font-weight: 500; }
+
+.exercise-block {
+    margin-bottom: 40px;
+    background: #000;
+    padding-bottom: 10px;
+}
+
+.exercise-block h3 {
+    color: #007aff;
+    margin: 20px 0 15px 0;
+    font-size: 20px;
+}
+
+/* Resetujemy ustawienia siatki */
+.set-row-header, .set-row {
+    display: grid !important;
+    /* 45px na numer, 3 równe kolumny, 45px na ptaszka */
+    grid-template-columns: 45px 1fr 1fr 1fr 45px !important;
+    gap: 8px !important;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+/* Wyrównanie napisów w nagłówku */
+.set-row-header span {
+    text-align: center;
+    font-size: 11px;
+    color: #8e8e93;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Wyrównanie inputów i numerka */
+.set-row .set-num {
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.set-row input {
+    width: 100% !important;
+    background: #1c1c1e;
+    border: none;
+    color: white;
+    padding: 10px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    display: block;
+}
+
+/* Przycisk ✔ */
+.check-btn {
+    width: 32px !important;      /* Stała szerokość */
+    height: 32px !important;     /* Stała wysokość */
+    border-radius: 50% !important; /* Idealne koło */
+    border: none;
+    background: #3a3a3c;         /* Ciemny szary (nieaktywny) */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    justify-self: center;        /* Centrowanie w kolumnie grid */
+    transition: background 0.2s;
+    font-size: 14px;
+}
+.check-btn.done {
+    background: #007aff !important; /* Niebieski */
+}
+.add-set-btn {
+    background: #1c1c1e; color: white; border: none; width: 100%;
+    padding: 10px; border-radius: 8px; margin-top: 10px; cursor: pointer;
+}
+.set-row {
+    grid-template-columns: 45px 1fr 1fr 1fr 45px !important;
+    align-items: center;
+}
+#profile-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 70px); /* Odjąć wysokość dolnego menu */
+    background: #000;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.profile-avatar {
+    border: 2px solid #007aff;
+}
+#home-screen, #profile-screen {
+    padding-bottom: 80px; /* Robi miejsce, żeby pasek nic nie zasłaniał */
+}
+/* Styl dla ekranów (Home i Profile) */
+.screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* Centruje w poziomie na telefonie */
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+/* Kontener na rekordy (kafelki) */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;            /* Ważne: zajmuje całą szerokość telefonu */
+    max-width: 400px;       /* Ale nie rozciąga się za mocno na kompie */
+    margin: 20px auto;      /* Centruje siatkę */
+}
+
+/* Przycisk wyloguj */
+.logout-btn {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 12px;
+    background: #ff453a;
+    color: white;
+    font-weight: bold;
+    border: none;
+}

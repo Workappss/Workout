@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Workout App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+<nav class="tab-bar">
+    <div class="tab-item" onclick="showScreen('home')">
+        <span class="material-symbols-outlined">home</span><span>Home</span>
+    </div>
+    <div class="tab-item" onclick="showScreen('workout')">
+    <span class="material-symbols-outlined">fitness_center</span>
+    <span>Workout</span>
+</div>
+    <div class="tab-item" onclick="showScreen('profile')">
+        <span class="material-symbols-outlined">person</span><span>Profile</span>
+    </div>
+</nav>
+    <div id="home-screen">
+        <header>
+            <div class="header-main">
+                <h1>Workouts <span class="material-symbols-outlined"></span></h1>
+                <span class="material-symbols-outlined"></span>
+            </div>
+        </header>
+
+        <main id="workout-list-container">
+            <div class="new-routine-container">
+                <div class="new-routine-btn" id="open-modal-btn">
+                    <span class="material-symbols-outlined">assignment</span>
+                    <span class="btn-text">New Workout</span>
+                </div>
+            </div>
+
+            <div id="workout-list"></div>
+        </main>
+    </div>
+
+    <div id="create-routine-screen" class="full-screen-modal">
+        <div class="modal-nav">
+            <button class="nav-btn blue-text" id="cancel-btn">Cancel</button>
+            <span class="modal-title">Create Workout</span>
+            <button class="nav-btn save-btn" id="save-routine-btn">Save</button>
+        </div>
+
+        <div class="modal-body">
+            <input type="text" id="routine-title-input" class="routine-title-input" placeholder="Workout title">
+            
+            <div id="added-exercises-list"></div>
+
+            <div id="empty-state-placeholder" class="empty-state">
+                <span class="material-symbols-outlined large-icon">fitness_center</span>
+                <p>Get started by adding an exercise to your workout.</p>
+            </div>
+
+            <button id="add-ex-trigger" onclick="addExercise()">Add Exercise</button>
+        </div>
+    </div>
+
+    <div id="action-sheet" class="action-sheet-overlay" style="display: none;">
+    <div class="action-sheet-container">
+        <div class="action-sheet-group">
+            <button class="action-btn" id="edit-routine-opt">
+                <span>Edit Workout</span>
+                <span class="material-symbols-outlined">edit</span>
+            </button>
+            <button class="action-btn delete-text" id="delete-routine-opt">
+                <span>Delete Workout</span>
+                <span class="material-symbols-outlined">delete</span>
+            </button>
+        </div>
+        <div class="action-sheet-group">
+            <button class="action-btn cancel-btn" id="close-action-sheet">Cancel</button>
+        </div>
+    </div>
+</div>
+<div id="active-workout-screen" class="full-screen-modal" style="display: none;">
+    <div class="modal-nav">
+        <span class="material-symbols-outlined" id="close-active-btn">expand_more</span>
+        <span class="modal-title">Log Workout</span>
+        <button onclick="finishWorkout()" style="width: 100%; background: #34c759; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer;">
+    Finish Workout
+</button>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-item"><span>Duration</span><div id="timer">0s</div></div>
+        <div class="stat-item"><span>Volume</span><div id="total-volume">0 kg</div></div>
+        <div class="stat-item"><span>Sets</span><div id="total-sets">0</div></div>
+    </div>
+
+    <div id="active-exercises-container" class="active-workout-body">
+        </div>
+</div>
+<div id="profile-screen" class="screen" style="display: none; background: #000; color: white; min-height: 100vh; padding: 20px;">
+    
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 400px; margin: 0 auto; padding-top: 40px;">
+        
+        <div style="width: 90px; height: 90px; background: #1c1c1e; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #3a3a3c; margin-bottom: 15px;">
+            <span class="material-symbols-outlined" style="font-size: 50px; color: #8e8e93;">person</span>
+        </div>
+
+        <h2 style="margin: 0; font-size: 24px; text-align: center;">Mój Profil</h2>
+        <p style="color: #8e8e93; margin: 5px 0 30px 0; text-align: center;">Statystyki i postępy</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%;">
+            <div style="background: #1c1c1e; padding: 20px; border-radius: 16px; text-align: center; border: 1px solid #2c2c2e;">
+                <div style="color: #007aff; font-size: 22px; font-weight: bold;">0</div>
+                <div style="font-size: 11px; color: #8e8e93; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px;">Treningi</div>
+            </div>
+            <div style="background: #1c1c1e; padding: 20px; border-radius: 16px; text-align: center; border: 1px solid #2c2c2e;">
+                <div style="color: #34c759; font-size: 22px; font-weight: bold;">0</div>
+                <div style="font-size: 11px; color: #8e8e93; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px;">Rekordy</div>
+            </div>
+        </div>
+<div onclick="showScreen('history')" style="width: 100%; background: #1c1c1e; padding: 18px; border-radius: 15px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid #3a3a3c;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="material-symbols-outlined" style="color: #007aff;">history</span>
+        <span style="color: white; font-weight: 500;">Historia treningów</span>
+    </div>
+    <span class="material-symbols-outlined" style="color: #48484a;">chevron_right</span>
+</div>
+        <button onclick="logout()" style="margin-top: 40px; background: #ff453a; color: white; border: none; padding: 16px; border-radius: 14px; width: 100%; font-weight: bold;">
+    Wyloguj się
+</button>
+
+    </div>
+</div>
+<div id="history-screen" class="screen" style="display: none; background: #000; color: white; min-height: 100vh; padding: 20px;">
+    <div style="display: flex; align-items: center; margin-bottom: 25px; padding-top: 10px;">
+        <span class="material-symbols-outlined" onclick="showScreen('profile')" style="cursor: pointer; padding: 10px; color: #007aff;">arrow_back_ios</span>
+        <h2 style="margin: 0; flex-grow: 1; text-align: center; margin-right: 40px;">Pełna Historia</h2>
+    </div>
+
+    <div id="full-history-list" style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto;">
+        </div>
+</div>
+<script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+      import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+      // TWOJA KONFIGURACJA (upewnij się, że apiKey jest identyczny jak w Firebase Console)
+      const firebaseConfig = {
+        apiKey: "AIzaSyAVpMe64MfKlC7-0sbPvD9Vj4arrFBcY4",
+        authDomain: "workapp-cd5c3.firebaseapp.com",
+        projectId: "workapp-cd5c3",
+        storageBucket: "workapp-cd5c3.firebasestorage.app",
+        messagingSenderId: "1000121699185",
+        appId: "1:1000121699185:web:2fe710c14ee22bf37944d0",
+        measurementId: "G-KYXDR8TRJE"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window.db = db;
+      window.fbOps = { collection, addDoc, getDocs, query, orderBy };
+
+      console.log("Firebase połączony poprawnie!");
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
