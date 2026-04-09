@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+<link rel="apple-touch-icon" href="icon-512.png">
+
+<meta name="theme-color" content="#121212">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Workout App</title>
@@ -126,24 +131,21 @@
                 <div style="font-size: 11px; color: #8e8e93; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px;">Rekordy</div>
             </div>
         </div>
-<div onclick="showScreen('history')" style="width: 100%; background: #1c1c1e; padding: 18px; border-radius: 15px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid #3a3a3c;">
-    <div style="display: flex; align-items: center; gap: 12px;">
-        <span class="material-symbols-outlined" style="color: #007aff;">history</span>
-        <span style="color: white; font-weight: 500;">Historia treningów</span>
-    </div>
-    <span class="material-symbols-outlined" style="color: #48484a;">chevron_right</span>
+<div class="dash-item" onclick="showScreen('history')" style="width: 100%; background: #1c1c1e; padding: 18px; border-radius: 15px; margin-top: 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;">
+    <span class="material-symbols-outlined" style="color: #007aff;">history</span>
+    <span style="color: white;">Historia treningów</span>
+    <span class="material-symbols-outlined" style="color: #48484a; margin-left: auto;">chevron_right</span>
 </div>
-    </div>
-</div>
-<div id="history-screen" class="screen" style="display: none; background: #000; color: white; min-height: 100vh; padding: 20px;">
-    <div style="display: flex; align-items: center; margin-bottom: 25px; padding-top: 10px;">
-        <span class="material-symbols-outlined" onclick="showScreen('profile')" style="cursor: pointer; padding: 10px; color: #007aff;">arrow_back_ios</span>
-        <h2 style="margin: 0; flex-grow: 1; text-align: center; margin-right: 40px;">Pełna Historia</h2>
+
+</div> </div> <div id="history-screen" class="screen" style="display: none; padding: 20px; background: #000; min-height: 100vh;">
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+        <span class="material-symbols-outlined" onclick="showScreen('profile')" style="cursor: pointer; font-size: 30px; color: white;">arrow_back</span>
+        <h2 style="margin: 0; font-size: 24px; color: white;">History</h2>
     </div>
 
-    <div id="full-history-list" style="display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin: 0 auto;">
-        </div>
+    <div id="workout-history-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
 </div>
+
 <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
       import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
