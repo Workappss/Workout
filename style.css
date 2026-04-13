@@ -34,7 +34,7 @@ h1 { font-size: 32px; margin: 0; display: flex; align-items: center; gap: 8px; }
 h2 { margin: 0; font-size: 20px; }
 .exercise-preview-list { color: #8e8e93; font-size: 15px; margin-bottom: 20px; line-height: 1.5; }
 .start-btn {
-    background-color: #007aff; color: white; border: none;
+    background-color: #34c759; color: white; border: none;
     width: 100%; padding: 12px; border-radius: 10px; font-size: 16px; font-weight: 600;
 }
 
@@ -45,7 +45,7 @@ h2 { margin: 0; font-size: 20px; }
 }
 .modal-nav { display: flex; justify-content: space-between; padding: 15px 16px; border-bottom: 0.5px solid #333; }
 .nav-btn { background: none; border: none; font-size: 17px; }
-.blue-text { color: #007aff; }
+.blue-text { color: #34c759; }
 .save-btn { color: #8e8e93; font-weight: 600; }
 .save-btn.active { color: #fff; }
 
@@ -66,7 +66,7 @@ h2 { margin: 0; font-size: 20px; }
 .large-icon { font-size: 60px !important; margin-bottom: 10px; }
 
 .add-exercise-btn {
-    background-color: #007aff; color: white; border: none;
+    background-color: #34c759; color: white; border: none;
     width: 100%; padding: 14px; border-radius: 10px; font-size: 17px;
     display: flex; align-items: center; justify-content: center; gap: 8px;
 }
@@ -96,11 +96,11 @@ h2 { margin: 0; font-size: 20px; }
 }
 
 .tab-item.active {
-    color: #007aff; /* Niebieski kolor iOS */
+    color: #34c759; /* Niebieski kolor iOS */
 }
 
 .tab-item.active .material-symbols-outlined {
-    color: #007aff;
+    color: #34c759;
 }
 
 .tab-item span {
@@ -142,10 +142,10 @@ h2 { margin: 0; font-size: 20px; }
 
 .action-btn:last-child { border-bottom: none; }
 .delete-text { color: #ff453a; }
-.cancel-btn { justify-content: center; font-weight: 600; color: #007aff; }
+.cancel-btn { justify-content: center; font-weight: 600; color: #34c759; }
 
 .active-workout-body { padding: 10px 16px; overflow-y: auto; flex: 1; }
-.finish-btn { background-color: #007aff; color: white; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.finish-btn { background-color: #34c759; color: white; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
 .stats-bar {
     display: flex; justify-content: space-around; padding: 15px 0;
@@ -153,7 +153,7 @@ h2 { margin: 0; font-size: 20px; }
 }
 .stat-item { text-align: center; }
 .stat-item span { color: #8e8e93; font-size: 12px; display: block; }
-.stat-item div { font-size: 18px; color: #007aff; font-weight: 500; }
+.stat-item div { font-size: 18px; color: #34c759; font-weight: 500; }
 
 .exercise-block {
     margin-bottom: 40px;
@@ -162,7 +162,7 @@ h2 { margin: 0; font-size: 20px; }
 }
 
 .exercise-block h3 {
-    color: #007aff;
+    color: #34c759;
     margin: 20px 0 15px 0;
     font-size: 20px;
 }
@@ -225,7 +225,7 @@ h2 { margin: 0; font-size: 20px; }
     font-size: 14px;
 }
 .check-btn.done {
-    background: #007aff !important; /* Niebieski */
+    background: #34c759 !important; /* Niebieski */
 }
 .add-set-btn {
     background: #1c1c1e; color: white; border: none; width: 100%;
@@ -247,7 +247,7 @@ h2 { margin: 0; font-size: 20px; }
 }
 
 .profile-avatar {
-    border: 2px solid #007aff;
+    border: 2px solid #34c759;
 }
 #home-screen, #profile-screen {
     padding-bottom: 80px; /* Robi miejsce, żeby pasek nic nie zasłaniał */
@@ -488,7 +488,7 @@ h2 { margin: 0; font-size: 20px; }
 .cancel-btn {
     margin-top: 10px;
     background: #2c2c2e;
-    color: #0a84ff; /* Niebieski kolor dla akcji */
+    color: #4ade80; /* Niebieski kolor dla akcji */
     border: none;
     padding: 15px;
     border-radius: 12px;
@@ -499,4 +499,36 @@ h2 { margin: 0; font-size: 20px; }
 
 .action-item.delete {
     color: #ff453a; /* Czerwony dla usuwania */
+}
+
+/* Ukrycie domyślnych strzałek przeglądarki */
+details summary::-webkit-details-marker {
+    display: none;
+}
+details summary {
+    list-style: none;
+}
+/* Ukrywamy domyślne strzałki przeglądarki */
+details summary::-webkit-details-marker { display: none; }
+details summary { list-style: none; outline: none; }
+
+/* Styl dla pierwotnej strzałki tekstowej */
+.arrow-icon {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    transform: rotate(0deg);
+    color: #8e8e93; /* Szary kolor */
+    font-size: 12px;
+    margin-right: 10px;
+    user-select: none;
+}
+
+/* Obrót o 90 stopni (z ▶ na ▼) */
+details[open] > summary .arrow-icon {
+    transform: rotate(90deg);
+}
+/* Efekt najechania na kosz */
+.history-delete-btn:active {
+    transform: scale(0.9);
+    opacity: 0.7;
 }

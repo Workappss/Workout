@@ -1,16 +1,10 @@
+
 function formatDuration(seconds) {
     if (!seconds || seconds < 1) return "0m";
-    const h = Math.floor(seconds / 3600);
+    const h = Math.floor(seconds / 3600);  
     const m = Math.floor((seconds % 3600) / 60);
     return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
-const style = document.createElement('style');
-style.textContent = `
-    details summary::-webkit-details-marker { display: none; }
-    details[open] .arrow-icon { transform: rotate(180deg); display: inline-block; }
-    /* Powyższe sprawi, że strzałka się obróci, co da efekt ▴ */
-`;
-document.head.appendChild(style);
 
 // ELEMENTY
 const modal = document.getElementById('create-routine-screen');
@@ -241,9 +235,9 @@ function createSetRow(num) {
     return `
         <div class="set-row">
             <span class="set-num" onclick="deleteSet(this)">${num}</span>
-            <input type="number" class="weight-input" placeholder="0" oninput="autoCheckSet(this)">
-            <input type="number" class="reps-input" placeholder="0" oninput="autoCheckSet(this)">
-            <input type="text" class="rir-input" placeholder="RIR" oninput="autoCheckSet(this)">
+            <input type="number" inputmode="decimal" step="any" class="weight-input" ... oninput="autoCheckSet(this)">
+            <input type="number" inputmode="numeric" class="reps-input" ... oninput="autoCheckSet(this)">
+            <input type="number" inputmode="numeric" class="rir-input" ... oninput="autoCheckSet(this)">
             <button class="check-btn" onclick="toggleSet(this)">✔</button>
         </div>
     `;
@@ -339,122 +333,87 @@ function showScreen(name) {
     }
 }
 
-async function loadWorkoutHistory() {
-const historyContainer = document.getElementById('workout-history-list');
-if (!historyContainer) return;
+function loadWorkoutHistory() {
+    const historyContainer = document.getElementById('workout-history-list');
+    if (!historyContainer) return;
 
-try {
-const q = window.fbOps.query(
-window.fbOps.collection(window.db, "workouts"),
-window.fbOps.orderBy("timestamp", "desc")
-);
-const querySnapshot = await window.fbOps.getDocs(q);
+    const savedHistory = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    historyContainer.innerHTML = '';
 
-historyContainer.innerHTML = '';
+    if (savedHistory.length === 0) {
+        historyContainer.innerHTML = '<p style="color: #8e8e93; text-align: center; margin-top: 20px;">Brak historii treningów.</p>';
+        return;
+    }
 
-if (querySnapshot.empty) {
-historyContainer.innerHTML = '<p style="color: #8e8e93; text-align: center; margin-top: 20px;">Brak treningów.</p>';
-return;
+    const groups = {};
+    savedHistory.forEach((workout) => {
+        const dateObj = new Date(workout.timestamp);
+        const monthYear = dateObj.toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' });
+        const capitalizedMonth = monthYear.charAt(0).toUpperCase() + monthYear.slice(1);
+        if (!groups[capitalizedMonth]) groups[capitalizedMonth] = [];
+        groups[capitalizedMonth].push(workout);
+    });
+
+    for (const month in groups) {
+        const monthSection = document.createElement('details');
+        monthSection.className = "history-section";
+        monthSection.style.cssText = "margin-bottom: 15px; background: #1c1c1e; border-radius: 12px; overflow: hidden;";
+
+        monthSection.innerHTML = `
+            <summary style="padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #2c2c2e;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <span class="arrow-icon">▶</span>
+                    <span style="color: #4ade80; font-weight: bold; font-size: 17px;">${month}</span>
+                </div>
+                <span style="color: #8e8e93; font-size: 12px;">${groups[month].length} treningi</span>
+            </summary>
+            <div style="padding: 10px; background: #121212; display: flex; flex-direction: column; gap: 10px;">
+                ${groups[month].map(workout => `
+                    <div style="position: relative; background: #1c1c1e; border-radius: 10px; overflow: hidden;">
+                        <div class="history-delete-btn" 
+                             style="position: absolute; right: 12px; top: 18px; z-index: 99; cursor: pointer; padding: 5px;"
+                             onclick="event.stopPropagation(); deleteWorkout('${workout.id}');">
+                             <span class="material-symbols-outlined" style="color: #ff453a; font-size: 22px;">delete</span>
+                        </div>
+
+                        <details>
+                            <summary style="padding: 12px 45px 12px 12px; cursor: pointer; border-left: 4px solid #4ade80;">
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <span class="arrow-icon" style="font-size: 10px;">▶</span>
+                                    <div>
+                                        <h3 style="margin: 0; color: white; font-size: 16px;">${workout.name}</h3>
+                                        <span style="color: #8e8e93; font-size: 11px;">${workout.date}</span>
+                                    </div>
+                                </div>
+                            </summary>
+                            
+                            <div style="padding: 15px; border-top: 1px solid #2c2c2e; background: #18181a;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                    <span style="color: #4ade80; font-weight: bold;">Objętość: ${workout.volume}</span>
+                                    <span style="color: #8e8e93; font-size: 12px;">⏱ ${formatDuration(workout.duration)}</span>
+                                </div>
+                                ${workout.exercises.map(ex => `
+                                    <div style="margin-bottom: 12px;">
+                                        <div style="color: white; font-size: 14px; margin-bottom: 4px;">${ex.name}</div>
+                                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                            ${ex.sets.map(set => `
+                                                <div style="background: #2c2c2e; padding: 5px 8px; border-radius: 8px;">
+                                                    <div style="color: #eee; font-size: 10px;">${set.weight}kg x ${set.reps}</div>
+                                                    <div style="color: #4ade80; font-size: 9px;">RIR: ${set.rir}</div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </details>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        historyContainer.appendChild(monthSection);
+    }
 }
-
-const groups = {};
-querySnapshot.forEach((doc) => {
-const data = doc.data();
-
-let dateObj;
-if (data.timestamp && typeof data.timestamp.toDate === 'function') {
-dateObj = data.timestamp.toDate();
-} else if (data.timestamp && data.timestamp.seconds) {
-dateObj = new Date(data.timestamp.seconds * 1000);
-} else {
-dateObj = new Date();
-}
-
-const monthYear = dateObj.toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' });
-const capitalizedMonth = monthYear.charAt(0).toUpperCase() + monthYear.slice(1);
-
-if (!groups[capitalizedMonth]) groups[capitalizedMonth] = [];
-groups[capitalizedMonth].push({ id: doc.id, ...data });
-});
-
-for (const month in groups) {
-const section = document.createElement('details');
-section.className = "history-section";
-// Foldery domyślnie ZWINIĘTE
-section.open = false;
-section.style.cssText = "margin-bottom: 15px; background: #1c1c1e; border-radius: 12px; overflow: hidden; border: none;";
-
-section.innerHTML = `
-<summary style="padding: 15px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: #2c2c2e; transition: 0.3s;">
-<span style="color: #4ade80; font-weight: bold; font-size: 17px;">${month}</span>
-<div style="display: flex; align-items: center; gap: 8px;">
-<span style="color: #8e8e93; font-size: 12px;">${groups[month].length} treningi</span>
-<span class="arrow-icon" style="color: #8e8e93; font-size: 10px; transition: transform 0.3s ease;">▼</span>
-</div>
-</summary>
-<div style="padding: 10px; background: #121212;">
-${groups[month].map(workout => {
-const d = workout.duration || 0;
-const h = Math.floor(d / 3600);
-const m = Math.floor((d % 3600) / 60);
-const timeStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
-
-// TUTAJ POPRAWIONA NAZWA:
-const workoutTitle = (workout.name && workout.name !== "Trening") ? workout.name : (workout.workoutName || workout.customName || `Trening - ${workout.date}`);
-
-return `
-<div style="background: #1c1c1e; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #4ade80;">
-<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
-<div>
-<h3 style="margin: 0; color: white; font-size: 18px; font-weight: 600;">${workoutTitle}</h3>
-<span style="color: #8e8e93; font-size: 12px;">${workout.date || ''}</span>
-</div>
-<div style="text-align: right;">
-<span style="color: #4ade80; font-weight: bold; font-size: 16px;">${workout.totalVolume || workout.volume || '0 kg'}</span>
-<div style="color: #8e8e93; font-size: 11px; margin-top: 2px;">⏱ ${timeStr}</div>
-</div>
-</div>
-<div>
-${(workout.exercises || []).map(ex => `
-<div style="margin-bottom: 12px;">
-<div style="color: white; font-size: 14px; margin-bottom: 6px; font-weight: 500;">${ex.name}</div>
-<div style="display: flex; gap: 4px; width: 100%;">
-${(ex.sets || []).map(set => `
-<div style="background: #2c2c2e; padding: 6px 2px; border-radius: 8px; text-align: center; flex: 1; min-width: 0;">
-<div style="color: #eee; font-size: 10px; font-weight: bold;">${set.weight}kg x ${set.reps}</div>
-<div style="color: #4ade80; font-size: 9px; font-weight: bold;">RIR: ${set.rir || 0}</div>
-</div>
-`).join('')}
-</div>
-</div>
-`).join('')}
-</div>
-</div>`;
-}).join('')}
-</div>
-`;
-
-historyContainer.appendChild(section);
-}
-
-// Dodajemy style dla strzałki (jeśli jeszcze ich nie ma w style.css)
-if (!document.getElementById('history-styles')) {
-const style = document.createElement('style');
-style.id = 'history-styles';
-style.innerHTML = `
-details[open] .arrow-icon { transform: rotate(180deg); }
-summary::-webkit-details-marker { display: none; }
-`;
-document.head.appendChild(style);
-}
-
-} catch (e) {
-console.error("Firebase History Error:", e);
-}
-}
-
-loadWorkoutHistory();
-
 
 function showHistory() {
     loadWorkoutHistory(); // Uruchamia tę async funkcję wyżej
@@ -462,79 +421,61 @@ function showHistory() {
 }
 
 
-async function finishWorkout() {
-console.log("--- START ZAPISU (Z RIR I CZASEM) ---");
+function finishWorkout() {
+    console.log("--- ZAPIS LOKALNY ---");
 
-// 1. Zatrzymujemy stoper
-if(typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+    // 1. Zatrzymujemy stoper
+    if(typeof timerInterval !== 'undefined') clearInterval(timerInterval);
 
-const endTime = Date.now();
-const durationSeconds = typeof startTime !== 'undefined' ? Math.floor((endTime - startTime) / 1000) : 0;
+    const endTime = Date.now();
+    const durationSeconds = typeof startTime !== 'undefined' ? Math.floor((endTime - startTime) / 1000) : 0;
 
-const workoutDetails = [];
-const container = document.getElementById('active-exercises-container');
+    const workoutDetails = [];
+    const container = document.getElementById('active-exercises-container');
 
-if (!container) {
-console.error("Nie znaleziono active-exercises-container!");
-return;
-}
+    // 2. Zbieramy dane o ćwiczeniach
+    const exerciseBlocks = container.querySelectorAll('.exercise-block');
 
-// 3. Zbieramy dane o ćwiczeniach
-const exerciseBlocks = container.querySelectorAll('.sets-list');
+    exerciseBlocks.forEach((block) => {
+        const exerciseName = block.querySelector('h3')?.innerText || "Ćwiczenie";
+        const sets = [];
+        const setRows = block.querySelectorAll('.set-row');
 
-exerciseBlocks.forEach((setsList) => {
-const exerciseName = setsList.previousElementSibling?.previousElementSibling?.innerText || "Ćwiczenie";
-const sets = [];
-const setRows = setsList.querySelectorAll('.set-row');
+        setRows.forEach(row => {
+            sets.push({
+                weight: row.querySelector('.weight-input')?.value || "0",
+                reps: row.querySelector('.reps-input')?.value || "0",
+                rir: row.querySelector('.rir-input')?.value || "0"
+            });
+        });
 
-setRows.forEach(row => {
-const weight = row.querySelector('.weight-input')?.value || "0";
-const reps = row.querySelector('.reps-input')?.value || "0";
-const rir = row.querySelector('.rir-input')?.value || "0";
+        workoutDetails.push({ name: exerciseName, sets: sets });
+    });
 
-sets.push({
-weight: weight,
-reps: reps,
-rir: rir
-});
-});
+    const currentTitle = (typeof activeWorkoutName !== 'undefined' && activeWorkoutName) ? activeWorkoutName : "Trening";
 
-workoutDetails.push({
-name: exerciseName,
-sets: sets
-});
-});
+    // 3. Budujemy obiekt treningu
+    const newWorkout = {
+        id: Date.now(), // Unikalny identyfikator
+        name: currentTitle,
+        date: new Date().toLocaleDateString('pl-PL'),
+        timestamp: endTime,
+        duration: durationSeconds,
+        volume: document.getElementById('total-volume')?.innerText || "0 kg",
+        exercises: workoutDetails
+    };
 
-// --- TUTAJ BYŁ BŁĄD, TERAZ JEST POPRAWKA ---
-// Zamiast szukać w h2, bierzemy nazwę, którą zapamiętaliśmy w Kroku 2
-const currentTitle = (typeof activeWorkoutName !== 'undefined' && activeWorkoutName) ? activeWorkoutName : "Trening";
+    // 4. ZAPIS DO LOCAL STORAGE
+    const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    history.unshift(newWorkout); // Dodajemy na górę listy
+    localStorage.setItem('workoutHistory', JSON.stringify(history));
 
-// 5. Budujemy obiekt do Firebase
-const newWorkout = {
-name: currentTitle, // Teraz tutaj trafi np. "Plaska"
-date: new Date().toLocaleDateString('pl-PL'),
-timestamp: window.fbOps.serverTimestamp ? window.fbOps.serverTimestamp() : endTime,
-duration: durationSeconds,
-volume: document.getElementById('total-volume')?.innerText || "0 kg",
-exercises: workoutDetails
-};
+    alert("Trening zapisany na telefonie!");
 
-console.log("Finalny obiekt:", newWorkout);
-
-try {
-await window.fbOps.addDoc(window.fbOps.collection(window.db, "workouts"), newWorkout);
-alert("Trening zapisany!");
-
-document.getElementById('active-workout-screen').style.display = 'none';
-showScreen('profile');
-
-// Odświeżamy historię (używamy Twojej nowej funkcji)
-if (typeof loadWorkoutHistory === 'function') loadWorkoutHistory();
-
-} catch (e) {
-console.error("Błąd zapisu:", e);
-alert("Błąd: " + e.message);
-}
+    // 5. Powrót do profilu
+    document.getElementById('active-workout-screen').style.display = 'none';
+    showScreen('profile');
+    loadWorkoutHistory(); // Odśwież listę od razu
 }
 
 
@@ -676,4 +617,19 @@ function formatWorkoutTime(seconds) {
         return `${h}h ${m}m`;
     }
     return `${m}m`;
+}
+async function deleteWorkout(workoutId) {
+    if (!confirm("Czy na pewno chcesz usunąć ten trening z historii?")) return;
+
+    try {
+        const { deleteDoc, doc } = window.fbOps;
+        // Tworzymy referencję do konkretnego dokumentu w kolekcji "workouts"
+        await window.fbOps.deleteDoc(window.fbOps.doc(window.db, "workouts", workoutId));
+        
+        alert("Trening został usunięty.");
+        loadWorkoutHistory(); // Odświeżamy widok historii
+    } catch (e) {
+        console.error("Błąd podczas usuwania:", e);
+        alert("Nie udało się usunąć treningu: " + e.message);
+    }
 }

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Workout App</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
     <div id="workout-mini-bar" style="display: none;">
@@ -145,30 +145,6 @@
 
     <div id="workout-history-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
 </div>
-
-<script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-      import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-      // TWOJA KONFIGURACJA (upewnij się, że apiKey jest identyczny jak w Firebase Console)
-      const firebaseConfig = {
-        apiKey: "AIzaSyAVpMe64MfKlC7-0sbPvD9Vj4arrFBcY4",
-        authDomain: "workapp-cd5c3.firebaseapp.com",
-        projectId: "workapp-cd5c3",
-        storageBucket: "workapp-cd5c3.firebasestorage.app",
-        messagingSenderId: "1000121699185",
-        appId: "1:1000121699185:web:2fe710c14ee22bf37944d0",
-        measurementId: "G-KYXDR8TRJE"
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-
-      window.db = db;
-      window.fbOps = { collection, addDoc, getDocs, query, orderBy };
-
-      console.log("Firebase połączony poprawnie!");
-    </script>
 
     <script src="app.js"></script>
 </body>
